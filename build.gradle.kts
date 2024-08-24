@@ -10,25 +10,20 @@ plugins {
 group = "com.troy"
 version = "1.0.0"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 allprojects {
     repositories {
         mavenCentral()
     }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "21"
         }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
     }
 
 }
@@ -49,5 +44,11 @@ subprojects {
         testImplementation("io.kotest:kotest-runner-junit5-jvm:5.8.1")
         testImplementation("io.kotest:kotest-assertions-core-jvm:5.8.1")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
 }
