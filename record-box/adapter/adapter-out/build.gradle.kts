@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("org.jetbrains.kotlin.plugin.jpa") version "2.0.20"
 }
 
 dependencies {

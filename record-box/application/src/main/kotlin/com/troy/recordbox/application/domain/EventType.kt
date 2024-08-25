@@ -6,5 +6,10 @@ enum class EventType(val code: String) {
     BIRTHDAY("12"),
     FUNERAL("20"),
     ETC("99"),
+    ;
 
+    companion object {
+        fun fromCode(code: String) = entries.find { it.code == code }
+            ?: throw IllegalArgumentException("$code 와 일치하는 유효값 없음")
+    }
 }
