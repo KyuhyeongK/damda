@@ -12,5 +12,5 @@ class Event(
     val eventDate: LocalDate = LocalDate.now(),
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime?,
-    val id: Long?,
+    val id: Long,
 )
