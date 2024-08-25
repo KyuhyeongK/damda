@@ -2,6 +2,8 @@ plugins {
     kotlin("jvm")
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
+subprojects {
+    dependencies {
+        implementation(project(":record-box:record-box-application"))
+    }
 }
