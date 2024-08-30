@@ -1,4 +1,4 @@
-package com.troy.damda.recordbox.adapter.out
+package com.troy.damda.recordbox.adapter.out.persistence
 
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.port.out.EventRepositoryPort

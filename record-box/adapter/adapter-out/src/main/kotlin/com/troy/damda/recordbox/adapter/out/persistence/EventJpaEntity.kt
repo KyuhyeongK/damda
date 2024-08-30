@@ -1,5 +1,7 @@
-package com.troy.damda.recordbox.adapter.out
+package com.troy.damda.recordbox.adapter.out.persistence
 
+import com.troy.damda.recordbox.adapter.out.persistence.config.EventRelationshipTypeConverter
+import com.troy.damda.recordbox.adapter.out.persistence.config.EventTypeConverter
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import com.troy.damda.recordbox.application.domain.EventType

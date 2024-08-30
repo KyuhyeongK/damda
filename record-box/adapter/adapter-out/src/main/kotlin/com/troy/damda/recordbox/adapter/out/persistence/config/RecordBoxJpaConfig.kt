@@ -1,4 +1,4 @@
-package com.troy.damda.recordbox.adapter.out
+package com.troy.damda.recordbox.adapter.out.persistence.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories

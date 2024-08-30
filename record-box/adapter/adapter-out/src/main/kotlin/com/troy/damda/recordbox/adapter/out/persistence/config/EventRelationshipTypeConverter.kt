@@ -1,4 +1,4 @@
-package com.troy.damda.recordbox.adapter.out
+package com.troy.damda.recordbox.adapter.out.persistence.config
 
 import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import jakarta.persistence.AttributeConverter
