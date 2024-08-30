@@ -14,3 +14,6 @@ project(":record-box:adapter:adapter-out").name = "record-box-adapter-out"
 
 // bootstrap 모듈
 include("bootstrap")
+
+// common 모듈
+include("common")
