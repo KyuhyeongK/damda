@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication(scanBasePackages = ["com.troy"])
 @EntityScan(basePackages = ["com.troy"])
-@EnableJpaRepositories(basePackages = ["com.troy"])
 class DamdaApplication
 
 fun main(args: Array<String>) {

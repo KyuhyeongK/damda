@@ -15,7 +15,8 @@ class EventJpaEntity(
     @Convert(converter = EventTypeConverter::class)
     @Column(name = "event_type_cd") private val type: EventType,
 
-    @ManyToOne private val createdBy: UserJpaEntity,
+    @ManyToOne @JoinColumn(name = "createdBy")
+    private val createdBy: UserJpaEntity,
     @Column(name = "event_owner_name") private val owner: String,
 
     @Convert(converter = EventRelationshipTypeConverter::class)
@@ -23,7 +24,9 @@ class EventJpaEntity(
     private val eventDate: LocalDate = LocalDate.now(),
     private val createdAt: LocalDateTime = LocalDateTime.now(),
     private val updatedAt: LocalDateTime?,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long?,
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "event_id")val id: Long?,
 ) {
 
     fun toDomain() = Event(
