@@ -17,3 +17,11 @@ include("bootstrap")
 
 // common 모듈
 include("common")
+
+// auth 모듈
+include("auth:application")
+include("auth:adapter:adapter-in")
+include("auth:adapter:adapter-out")
+project(":auth:application").name = "auth-application"
+project(":auth:adapter:adapter-in").name = "auth-adapter-in"
+project(":auth:adapter:adapter-out").name = "auth-adapter-out"
