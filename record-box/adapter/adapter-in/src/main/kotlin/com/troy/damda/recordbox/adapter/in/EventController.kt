@@ -1,6 +1,6 @@
 package com.troy.damda.recordbox.adapter.`in`
 
-import com.troy.damda.common.util.logger
+import com.troy.damda.logger
 import com.troy.damda.recordbox.application.port.`in`.EventQuery
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

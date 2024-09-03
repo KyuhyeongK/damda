@@ -1,4 +1,4 @@
-package com.troy.damda.bootstrap
+package com.troy.damda
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan

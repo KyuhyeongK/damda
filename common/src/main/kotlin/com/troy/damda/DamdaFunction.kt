@@ -1,4 +1,4 @@
-package com.troy.damda.common.util
+package com.troy.damda
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
