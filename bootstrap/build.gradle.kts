@@ -7,5 +7,6 @@ plugins {
 dependencies {
     implementation(project(":record-box:adapter:record-box-adapter-in"))
     implementation(project(":record-box:adapter:record-box-adapter-out"))
-
+    implementation(project(":auth:adapter:auth-adapter-in"))
+    implementation(project(":auth:adapter:auth-adapter-out"))
 }

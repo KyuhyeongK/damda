@@ -8,7 +8,7 @@ import jakarta.persistence.*
 class UserJpaEntity(
     private val nickname: String,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id") val id: Long?,
+    @Column(name = "user_mgmt_no") val id: Long?,
 ) {
 
     fun toDomain() = User(nickname, id!!)
