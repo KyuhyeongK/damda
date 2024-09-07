@@ -12,3 +12,7 @@ spring:
         format_sql: true
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: 24c9ca535a15fcfc8059ff186ed2bad65fa5251cded7a440029baaa2362202d20682f3351fe8f00f0905255b2f657ac424d16d36142d59dad3c6461c916bfc6e
+  expiration: 600000
