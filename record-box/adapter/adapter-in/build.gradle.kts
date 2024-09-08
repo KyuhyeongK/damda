@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":auth:auth-application"))
 }

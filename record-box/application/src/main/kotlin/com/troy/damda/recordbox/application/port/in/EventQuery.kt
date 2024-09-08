@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 interface EventQuery {
 
-    fun getEventsFrom(userId: Long): List<EventResult>
+    fun getEventsFrom(userMgmtNo: Long): List<EventResult>
 
     data class EventResult(
         val eventName: String,

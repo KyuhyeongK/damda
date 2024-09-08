@@ -9,7 +9,7 @@ class EventRepositoryAdapter(
     private val eventRepository: EventJpaRepository,
 ) : EventRepositoryPort {
 
-    override fun findAllByCreatedBy(userId: Long): List<Event> {
-        return eventRepository.findAllByCreatedBy(userId).map { it.toDomain() }
+    override fun findAllByCreatedBy(userMgmtNo: Long): List<Event> {
+        return eventRepository.findAllByCreatedBy(userMgmtNo).map { it.toDomain() }
     }
 }

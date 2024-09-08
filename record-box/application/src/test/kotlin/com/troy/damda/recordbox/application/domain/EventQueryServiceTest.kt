@@ -6,7 +6,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 
 class EventQueryServiceTest : StringSpec({
     val sut = EventQueryService(object : EventRepositoryPort {
-        override fun findAllByCreatedBy(userId: Long): List<Event> {
+        override fun findAllByCreatedBy(userMgmtNo: Long): List<Event> {
             return emptyList()
         }
     })

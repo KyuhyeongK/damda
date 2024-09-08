@@ -9,7 +9,7 @@ class EventQueryService(
     private val eventRepository: EventRepositoryPort,
 ) : EventQuery {
 
-    override fun getEventsFrom(userId: Long): List<EventQuery.EventResult> {
-        return eventRepository.findAllByCreatedBy(userId).map { EventQuery.EventResult.fromEvent(it) }
+    override fun getEventsFrom(userMgmtNo: Long): List<EventQuery.EventResult> {
+        return eventRepository.findAllByCreatedBy(userMgmtNo).map { EventQuery.EventResult.fromEvent(it) }
     }
 }

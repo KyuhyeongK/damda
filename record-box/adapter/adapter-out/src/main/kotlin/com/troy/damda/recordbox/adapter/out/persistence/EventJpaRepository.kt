@@ -10,8 +10,8 @@ interface EventJpaRepository : JpaRepository<EventJpaEntity, Long> {
         """
         select a
         from EventJpaEntity a
-        where a.createdBy.id = :userId
+        where a.createdBy.id = :userMgmtNo
     """
     )
-    fun findAllByCreatedBy(@Param("userId") userId: Long): List<EventJpaEntity>
+    fun findAllByCreatedBy(@Param("userMgmtNo") userMgmtNo: Long): List<EventJpaEntity>
 }
