@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/damda/v1/users")
+@RequestMapping("/damda/v1/auth/users")
 class LoginController(
     private val loginUseCase: LoginUseCase,
 ) {
