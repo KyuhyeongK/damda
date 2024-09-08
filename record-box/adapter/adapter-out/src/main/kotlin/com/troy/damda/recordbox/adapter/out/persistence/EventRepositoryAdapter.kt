@@ -10,6 +10,6 @@ class EventRepositoryAdapter(
 ) : EventRepositoryPort {
 
     override fun findAllByCreatedBy(userMgmtNo: Long): List<Event> {
-        return eventRepository.findAllByCreatedBy(userMgmtNo).map { it.toDomain() }
+        return eventRepository.findAllByCreatedById(userMgmtNo).map { it.toDomain() }
     }
 }
