@@ -13,22 +13,22 @@ class JwtTokenProviderTest : StringSpec({
 
 
     "토큰 만료시간이 현재 이후인 토큰은 검증 성공" {
-        val sut = JwtTokenProvider(secretKey, 6000000)
-        val token = sut.createToken(userMgmtNo)
+        val sut = JwtTokenProvider(secretKey, 6000000, 6000000)
+        val token = sut.createAccessToken(userMgmtNo)
         println("token = ${token}")
 
         sut.getUserMgmtNoFromToken(token) shouldNotBe null
     }
 
     "만료된 토큰은 예외 발생" {
-        val sut = JwtTokenProvider(secretKey, -10000)
-        val token = sut.createToken(userMgmtNo)
+        val sut = JwtTokenProvider(secretKey, -10000, -10000)
+        val token = sut.createAccessToken(userMgmtNo)
 
         shouldThrow<TokenExpiredException> { sut.getUserMgmtNoFromToken(token) }
     }
 
     "이상한 토큰을 파싱하는 경우 예외 발생" {
-        val sut = JwtTokenProvider(secretKey, 6000000)
+        val sut = JwtTokenProvider(secretKey, 6000000, 6000000)
 
         shouldThrow<MalformedTokenException> { sut.getUserMgmtNoFromToken("token") }
     }

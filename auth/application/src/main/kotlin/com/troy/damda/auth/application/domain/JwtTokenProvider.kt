@@ -16,13 +16,13 @@ import java.util.*
 class JwtTokenProvider(
     @Value("\${jwt.secret}") private val secretKey: String,
     @Value("\${jwt.expiration}") private val expiration: Long,
+    @Value("\${jwt.refresh.expiration}") private val refreshExpiration: Long,
 ) {
 
     private val hmacShaKey = Keys.hmacShaKeyFor(secretKey.toByteArray(Charsets.UTF_8))
     private val log = logger()
 
-
-    fun createToken(userMgmtNo: Long): String {
+    fun createAccessToken(userMgmtNo: Long): String {
         val now = Date()
         val expirationDate = Date(now.time + expiration)
 
@@ -35,6 +35,20 @@ class JwtTokenProvider(
             .compact()
 
         return jwtToken
+    }
+
+    fun createRefreshToken(): String {
+        val now = Date()
+        val expirationDate = Date(now.time + refreshExpiration)
+
+        val refreshToken = Jwts.builder()
+            .issuer("damda")
+            .issuedAt(now)
+            .expiration(expirationDate)
+            .signWith(hmacShaKey)
+            .compact()
+
+        return refreshToken
     }
 
     fun getUserMgmtNoFromToken(token: String): Long {
