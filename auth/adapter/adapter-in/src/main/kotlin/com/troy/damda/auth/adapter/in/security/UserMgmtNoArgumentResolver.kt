@@ -1,5 +1,6 @@
 package com.troy.damda.auth.adapter.`in`.security
 
+import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
 import org.springframework.core.MethodParameter
 import org.springframework.security.core.context.SecurityContextHolder

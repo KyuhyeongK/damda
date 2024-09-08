@@ -1,4 +1,4 @@
-package com.troy.damda.auth.adapter.`in`.security
+package com.troy.damda.auth.application.port.`in`
 
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
