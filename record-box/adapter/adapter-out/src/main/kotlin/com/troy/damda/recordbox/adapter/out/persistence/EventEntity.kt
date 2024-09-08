@@ -11,14 +11,14 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "event_m")
-class EventJpaEntity(
+class EventEntity(
     @Column(name = "event_name") private val name: String,
 
     @Convert(converter = EventTypeConverter::class)
     @Column(name = "event_type_cd") private val type: EventType,
 
     @ManyToOne @JoinColumn(name = "createdBy")
-    private val createdBy: UserJpaEntity,
+    private val createdBy: EventUserEntity,
     @Column(name = "event_owner_name") private val owner: String,
 
     @Convert(converter = EventRelationshipTypeConverter::class)

@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @Configuration
 @EnableJpaRepositories(basePackages = ["com.troy.damda.recordbox.adapter.out"])
 @EntityScan(basePackages = ["com.troy.damda.recordbox.adapter.out"])
-class RecordBoxJpaConfig {
-}
+class RecordBoxJpaConfig
