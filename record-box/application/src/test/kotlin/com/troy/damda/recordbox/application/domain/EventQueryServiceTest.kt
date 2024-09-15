@@ -1,11 +1,11 @@
 package com.troy.damda.recordbox.application.domain
 
-import com.troy.damda.recordbox.application.port.out.EventRepositoryPort
+import com.troy.damda.recordbox.application.port.out.LoadEventPort
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 
 class EventQueryServiceTest : StringSpec({
-    val sut = EventQueryService(object : EventRepositoryPort {
+    val sut = EventQueryService(object : LoadEventPort {
         override fun findAllByCreatedBy(userMgmtNo: Long): List<Event> {
             return emptyList()
         }
