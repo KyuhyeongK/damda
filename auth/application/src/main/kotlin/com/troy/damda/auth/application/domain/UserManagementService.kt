@@ -1,19 +1,21 @@
 package com.troy.damda.auth.application.domain
 
 import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
-import com.troy.damda.auth.application.port.out.UserRepositoryPort
+import com.troy.damda.auth.application.port.out.LoadUserPort
+import com.troy.damda.auth.application.port.out.CreateUserPort
 import org.springframework.stereotype.Service
 
 @Service
 class UserManagementService(
-    private val userRepository: UserRepositoryPort,
+    private val loadUserPort: LoadUserPort,
+    private val createUserPort: CreateUserPort,
 ) : UserManagementUseCase {
 
     override fun signUp(request: UserManagementUseCase.SignUpRequest) {
-        userRepository.findByUserIdAndPassword(request.userId, request.password)
+        loadUserPort.findByUserIdAndPassword(request.userId, request.password)
             ?.let { throw IllegalStateException("User ${request.userId} already exists") }
 
-        userRepository.save(
+        createUserPort.create(
             User(
                 request.nickname, request.userId, request.password, UserStatus.NORMAL
             )

@@ -11,6 +11,7 @@ import jakarta.persistence.Table
 class TokenEntity(
     private val userMgmtNo: Long,
     @Id @Column(name = "token_value") private val id: String? = null,
+    // todo 토큰 생성시간, 만료시간 컬럼 추가 필요
 ) {
     fun toDomain() = Token(userMgmtNo, id!!)
 
