@@ -1,14 +1,14 @@
 package com.troy.damda.auth.application.domain
 
 import com.troy.damda.auth.application.port.`in`.LoginUseCase
+import com.troy.damda.auth.application.port.out.CreateTokenPort
 import com.troy.damda.auth.application.port.out.LoadUserPort
-import com.troy.damda.auth.application.port.out.TokenRepositoryPort
 import org.springframework.stereotype.Service
 
 @Service
 class LoginService(
     private val loadUserPort: LoadUserPort,
-    private val tokenRepository: TokenRepositoryPort,
+    private val createTokenPort: CreateTokenPort,
     private val tokenProvider: JwtTokenProvider,
 ) : LoginUseCase {
 
@@ -18,7 +18,7 @@ class LoginService(
         val accessToken = tokenProvider.createAccessToken(user.userMgmtNo!!)
         val refreshToken = tokenProvider.createRefreshToken()
 
-        tokenRepository.save(Token(user.userMgmtNo, refreshToken))
+        createTokenPort.save(Token(user.userMgmtNo, refreshToken))
 
         return LoginUseCase.LoginResponse(accessToken, refreshToken)
     }
