@@ -10,6 +10,9 @@ class EventUserEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_mgmt_no") val id: Long?,
 ) {
+    companion object {
+        fun fromDomain(user: User) = EventUserEntity(user.nickname, user.id)
+    }
 
     fun toDomain() = User(nickname, id!!)
 }

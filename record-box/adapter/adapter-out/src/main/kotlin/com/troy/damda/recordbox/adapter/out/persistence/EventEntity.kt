@@ -28,8 +28,22 @@ class EventEntity(
     private val updatedAt: LocalDateTime?,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")val id: Long?,
+    @Column(name = "event_id")val id: Long? = null,
 ) {
+
+    companion object {
+        fun fromDomain(event: Event) = EventEntity(
+            event.name,
+            event.type,
+            EventUserEntity.fromDomain(event.createdBy),
+            event.owner,
+            event.relationship,
+            event.eventDate,
+            event.createdAt,
+            event.updatedAt,
+            event.id
+        )
+    }
 
     fun toDomain() = Event(
         name, type, createdBy.toDomain(), owner, relationship, eventDate, createdAt, updatedAt, id!!

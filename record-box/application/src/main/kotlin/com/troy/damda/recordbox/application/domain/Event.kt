@@ -11,6 +11,6 @@ class Event(
     val relationship: EventRelationshipType,
     val eventDate: LocalDate = LocalDate.now(),
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    val updatedAt: LocalDateTime?,
-    val id: Long,
+    val updatedAt: LocalDateTime? = null,
+    val id: Long? = null,
 )

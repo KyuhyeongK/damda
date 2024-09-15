@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/damda/v1/record-box/events")
-class EventController(
+class EventQueryController(
     private val eventQuery: EventQuery,
 ) {
     private val log = logger()
