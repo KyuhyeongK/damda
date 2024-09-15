@@ -15,7 +15,7 @@ class UserManagementService(
         loadUserPort.findByUserIdAndPassword(request.userId, request.password)
             ?.let { throw IllegalStateException("User ${request.userId} already exists") }
 
-        createUserPort.save(
+        createUserPort.create(
             User(
                 request.nickname, request.userId, request.password, UserStatus.NORMAL
             )

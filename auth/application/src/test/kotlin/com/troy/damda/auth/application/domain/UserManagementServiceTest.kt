@@ -37,7 +37,7 @@ class UserManagementServiceTest : BehaviorSpec({
 
         `when`("존재하지 않는 회원이라면") {
             every { loadUserPort.findByUserIdAndPassword(userId, password) } returns null
-            every { createUserPort.save(any()) } returns User(
+            every { createUserPort.create(any()) } returns User(
                 nickname,
                 userId,
                 password,

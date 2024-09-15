@@ -14,7 +14,7 @@ class UserRepositoryAdapter(
         return userRepository.findByUserIdAndPassword(userId, password)?.toDomain()
     }
 
-    override fun save(user: User): User {
+    override fun create(user: User): User {
         return userRepository.save(UserEntity.fromDomain(user)).toDomain()
     }
 }

@@ -18,7 +18,7 @@ class LoginService(
         val accessToken = tokenProvider.createAccessToken(user.userMgmtNo!!)
         val refreshToken = tokenProvider.createRefreshToken()
 
-        createTokenPort.save(Token(user.userMgmtNo, refreshToken))
+        createTokenPort.create(Token(user.userMgmtNo, refreshToken))
 
         return LoginUseCase.LoginResponse(accessToken, refreshToken)
     }

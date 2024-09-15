@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 class TokenRepositoryAdapter(
     private val tokenRepository: TokenRepository,
 ) : LoadTokenPort, CreateTokenPort {
-    override fun save(token: Token): Token {
+    override fun create(token: Token): Token {
         return tokenRepository.save(TokenEntity.fromDomain(token)).toDomain()
     }
 
