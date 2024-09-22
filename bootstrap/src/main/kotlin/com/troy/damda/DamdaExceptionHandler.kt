@@ -3,6 +3,7 @@ package com.troy.damda
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice(basePackages = ["com.troy"])
@@ -19,9 +20,9 @@ class DamdaExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    protected fun handleDefaultExceptions(exception: Exception, response: HttpServletResponse): DamdaErrorResponse {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected fun handleDefaultExceptions(exception: Exception): DamdaErrorResponse {
         log.warn("지원하지 않는 시스템오류 발생: ${exception.message}", exception)
-        response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
 
         return DamdaErrorResponse(
             code = "DE9999", message = "An unexpected error occurred"

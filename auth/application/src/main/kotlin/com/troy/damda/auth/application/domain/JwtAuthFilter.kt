@@ -3,6 +3,7 @@ package com.troy.damda.auth.application.domain
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.troy.damda.DamdaErrorResponse
 import com.troy.damda.DamdaException
+import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -11,6 +12,8 @@ import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.method.HandlerMethod
+import org.springframework.web.servlet.HandlerMapping
 
 class JwtAuthFilter(
     private val jwtTokenProvider: JwtTokenProvider,
@@ -23,11 +26,16 @@ class JwtAuthFilter(
     ) {
         log.debug("doFilterInternal!!")
 
+        val handler = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE) as? HandlerMethod
+        val loginNeeded = handler?.methodParameters?.any { it.hasParameterAnnotation(UserMgmtNo::class.java) } ?: false
+
         runCatching {
-            resolveToken(request)?.let {
-                log.debug("Bearer 토큰 => $it")
-                val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
-                SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
+            if (loginNeeded) {
+                resolveToken(request)?.let {
+                    log.debug("Bearer 토큰 => $it")
+                    val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
+                    SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
+                }
             }
         }.onSuccess {
             filterChain.doFilter(request, response)
