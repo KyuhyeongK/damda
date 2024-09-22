@@ -1,9 +1,13 @@
 package com.troy.damda.auth.application.domain
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.troy.damda.DamdaErrorResponse
+import com.troy.damda.DamdaException
 import com.troy.damda.logger
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -19,13 +23,18 @@ class JwtAuthFilter(
     ) {
         log.debug("doFilterInternal!!")
 
-
-        resolveToken(request)?.let {
-            log.debug("Bearer 토큰 => $it")
-            val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
-            SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
+        runCatching {
+            resolveToken(request)?.let {
+                log.debug("Bearer 토큰 => $it")
+                val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
+                SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
+            }
+        }.onSuccess {
+            filterChain.doFilter(request, response)
+        }.onFailure {
+            handleAuthException(response, it as DamdaException)
         }
-        filterChain.doFilter(request, response)
+
     }
 
     private fun resolveToken(request: HttpServletRequest): String? {
@@ -38,5 +47,16 @@ class JwtAuthFilter(
 
     private fun getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo: Long): UsernamePasswordAuthenticationToken {
         return UsernamePasswordAuthenticationToken(userMgmtNo, "")
+    }
+
+    private fun handleAuthException(response: HttpServletResponse, exception: DamdaException) {
+        val authErrorResponse = DamdaErrorResponse(exception.errorCode, exception.message)
+
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.outputStream.use {
+            it.write(ObjectMapper().writeValueAsBytes(authErrorResponse))
+            it.flush()
+        }
     }
 }

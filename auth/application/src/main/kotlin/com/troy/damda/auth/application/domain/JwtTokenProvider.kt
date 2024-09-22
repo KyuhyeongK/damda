@@ -71,7 +71,6 @@ class JwtTokenProvider(
         } catch (e: MalformedJwtException) {
             throw MalformedTokenException(e)
         } catch (e: Exception) {
-            e.printStackTrace()
             throw TokenAuthException(e)
         }
 
