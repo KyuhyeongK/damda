@@ -3,6 +3,7 @@ package com.troy.damda.auth.application.domain
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.troy.damda.DamdaErrorResponse
 import com.troy.damda.DamdaException
+import com.troy.damda.auth.application.domain.exception.TokenNeedException
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
 import jakarta.servlet.http.HttpServletRequest
@@ -32,7 +33,7 @@ class JwtAuthInterceptor(
                     log.debug("Bearer 토큰 => $it")
                     val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
                     SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
-                }
+                } ?: throw TokenNeedException()
             }
         }.onFailure {
             handleAuthException(response, it as DamdaException)
