@@ -19,13 +19,14 @@ interface EventQuery {
         val eventDate: LocalDate,
         val createdAt: LocalDateTime,
         val updatedAt: LocalDateTime?,
+        val eventId: Long,
     ) {
         companion object {
             fun fromEvent(event: Event): EventResult {
                 return EventResult(
                     event.name, event.type, event.createdBy.nickname,
                     event.owner, event.relationship, event.eventDate,
-                    event.createdAt, event.updatedAt
+                    event.createdAt, event.updatedAt, event.id!!
                 )
             }
         }
