@@ -1,7 +1,8 @@
 package com.troy.damda.auth.adapter.`in`
 
+import com.troy.damda.DamdaResponse
 import com.troy.damda.auth.application.port.`in`.LoginUseCase
-import org.springframework.http.ResponseEntity
+import com.troy.damda.ok
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,8 +15,8 @@ class LoginController(
 ) {
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginUseCase.LoginRequest): ResponseEntity<LoginUseCase.LoginResponse> {
-        return ResponseEntity.ok(loginUseCase.login(loginRequest))
+    fun login(@RequestBody loginRequest: LoginUseCase.LoginRequest): DamdaResponse<LoginUseCase.LoginResponse> {
+        return ok(loginUseCase.login(loginRequest))
     }
 
 }

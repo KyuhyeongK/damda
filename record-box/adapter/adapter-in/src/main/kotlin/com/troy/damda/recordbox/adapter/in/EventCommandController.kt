@@ -1,7 +1,9 @@
 package com.troy.damda.recordbox.adapter.`in`
 
+import com.troy.damda.DamdaResponse
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
+import com.troy.damda.ok
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase
 import com.troy.damda.recordbox.application.port.`in`.UpdateEventUseCase
 import org.springframework.web.bind.annotation.*
@@ -19,9 +21,9 @@ class EventCommandController(
     fun createEvent(
         @UserMgmtNo userMgmtNo: Long,
         @RequestBody request: CreateEventUseCase.CreateEventRequest
-    ): CreateEventUseCase.CreateEventResponse {
+    ): DamdaResponse<CreateEventUseCase.CreateEventResponse> {
         log.debug("createEvent :: req => {}", request)
-        return createEventUseCase.createEvent(userMgmtNo, request)
+        return ok(createEventUseCase.createEvent(userMgmtNo, request))
     }
 
     @PutMapping("/{eventId}")
@@ -29,7 +31,7 @@ class EventCommandController(
         @UserMgmtNo userMgmtNo: Long,
         @PathVariable eventId: Long,
         @RequestBody request: UpdateEventUseCase.UpdateEventRequest
-    ): UpdateEventUseCase.UpdateEventResponse {
-        return updateEventUseCase.updateEvent(userMgmtNo, eventId, request)
+    ): DamdaResponse<UpdateEventUseCase.UpdateEventResponse> {
+        return ok(updateEventUseCase.updateEvent(userMgmtNo, eventId, request))
     }
 }

@@ -1,8 +1,9 @@
 package com.troy.damda.auth.adapter.`in`
 
+import com.troy.damda.DamdaResponse
 import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
 import com.troy.damda.logger
-import org.springframework.http.ResponseEntity
+import com.troy.damda.ok
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,10 +18,10 @@ class UserManagementController(
     private val log = logger()
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody request: UserManagementUseCase.SignUpRequest): ResponseEntity<Unit> {
+    fun signUp(@RequestBody request: UserManagementUseCase.SignUpRequest): DamdaResponse<Unit> {
         log.debug("회원가입 요청 Dto => {}", request)
         userManagementUseCase.signUp(request)
-        return ResponseEntity.ok(Unit)
+        return ok(Unit)
     }
 
 }
