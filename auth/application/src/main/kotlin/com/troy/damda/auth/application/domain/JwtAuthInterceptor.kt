@@ -5,31 +5,28 @@ import com.troy.damda.DamdaErrorResponse
 import com.troy.damda.DamdaException
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
-import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.method.HandlerMethod
-import org.springframework.web.servlet.HandlerMapping
+import org.springframework.web.servlet.HandlerInterceptor
 
-class JwtAuthFilter(
+class JwtAuthInterceptor(
     private val jwtTokenProvider: JwtTokenProvider,
-) : OncePerRequestFilter() {
+) : HandlerInterceptor {
 
     private val log = logger()
 
-    override fun doFilterInternal(
-        request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
-    ) {
+    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         log.debug("doFilterInternal!!")
 
-        val handler = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE) as? HandlerMethod
-        val loginNeeded = handler?.methodParameters?.any { it.hasParameterAnnotation(UserMgmtNo::class.java) } ?: false
+        val handlerMethod = handler as? HandlerMethod
+        val loginNeeded =
+            handlerMethod?.methodParameters?.any { it.hasParameterAnnotation(UserMgmtNo::class.java) } ?: false
 
-        runCatching {
+        return runCatching {
             if (loginNeeded) {
                 resolveToken(request)?.let {
                     log.debug("Bearer 토큰 => $it")
@@ -37,11 +34,9 @@ class JwtAuthFilter(
                     SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
                 }
             }
-        }.onSuccess {
-            filterChain.doFilter(request, response)
         }.onFailure {
             handleAuthException(response, it as DamdaException)
-        }
+        }.isSuccess
 
     }
 

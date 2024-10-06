@@ -3,11 +3,13 @@ package com.troy.damda.auth.application.domain
 import com.troy.damda.auth.application.domain.exception.MalformedTokenException
 import com.troy.damda.auth.application.domain.exception.TokenAuthException
 import com.troy.damda.auth.application.domain.exception.TokenExpiredException
+import com.troy.damda.auth.application.domain.exception.WrongTokenException
 import com.troy.damda.logger
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
@@ -70,6 +72,8 @@ class JwtTokenProvider(
             throw TokenExpiredException(e)
         } catch (e: MalformedJwtException) {
             throw MalformedTokenException(e)
+        } catch (e: SignatureException) {
+            throw WrongTokenException(e)
         } catch (e: Exception) {
             throw TokenAuthException(e)
         }
