@@ -1,12 +1,14 @@
 package com.troy.damda.recordbox.application.domain
 
+import com.troy.damda.YN
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase.*
-import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase.CreateEventResponse.*
+import com.troy.damda.recordbox.application.port.`in`.DeleteEventUseCase
 import com.troy.damda.recordbox.application.port.`in`.UpdateEventUseCase
 import com.troy.damda.recordbox.application.port.`in`.UpdateEventUseCase.*
 import com.troy.damda.recordbox.application.port.out.CreateEventPort
+import com.troy.damda.recordbox.application.port.out.DeleteEventPort
 import com.troy.damda.recordbox.application.port.out.LoadEventPort
 import com.troy.damda.recordbox.application.port.out.UpdateEventPort
 import org.springframework.stereotype.Service
@@ -19,7 +21,8 @@ class EventUseCaseService(
     private val loadEventPort: LoadEventPort,
     private val updateEventPort: UpdateEventPort,
     private val loadUserPort: LoadUserPort,
-) : CreateEventUseCase, UpdateEventUseCase {
+    private val deleteEventPort: DeleteEventPort,
+) : CreateEventUseCase, UpdateEventUseCase, DeleteEventUseCase {
     override fun createEvent(
         userMgmtNo: Long, request: CreateEventRequest
     ): CreateEventResponse {
@@ -54,4 +57,10 @@ class EventUseCaseService(
         } ?: throw RuntimeException("Event with id $eventId not found.")
     }
 
+    override fun deleteEvent(userMgmtNo: Long, eventId: Long) {
+        loadEventPort.findById(eventId)?.let {
+            it.delete(userMgmtNo)
+            deleteEventPort.delete(it)
+        } ?: throw RuntimeException("Event with id $eventId not found.")
+    }
 }

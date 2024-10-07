@@ -23,10 +23,11 @@ class DamdaExceptionHandler {
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected fun handleDefaultException(exception: Exception): DamdaErrorResponse {
-        log.warn("지원하지 않는 시스템오류 발생: ${exception.message}", exception)
+        val message = exception.message
+        log.warn("지원하지 않는 시스템오류 발생: $message", exception)
 
         return DamdaErrorResponse(
-            code = "DE9999", message = "An unexpected error occurred"
+            code = "DE9999", message = "An unexpected error occurred: $message"
         )
     }
 

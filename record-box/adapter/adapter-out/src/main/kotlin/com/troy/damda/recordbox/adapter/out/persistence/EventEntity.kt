@@ -1,5 +1,7 @@
 package com.troy.damda.recordbox.adapter.out.persistence
 
+import com.troy.damda.YN
+import com.troy.damda.recordbox.adapter.out.persistence.config.DeleteYNConverter
 import com.troy.damda.recordbox.adapter.out.persistence.config.EventRelationshipTypeConverter
 import com.troy.damda.recordbox.adapter.out.persistence.config.EventTypeConverter
 import com.troy.damda.recordbox.application.domain.Event
@@ -26,9 +28,11 @@ class EventEntity(
     private val eventDate: LocalDate = LocalDate.now(),
     private val createdAt: LocalDateTime = LocalDateTime.now(),
     private val updatedAt: LocalDateTime?,
+    @Convert(converter = DeleteYNConverter::class)
+    @Column(name = "delete_yn") private val deleteYn: YN?,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")val id: Long? = null,
+    @Column(name = "event_id") val id: Long? = null,
 ) {
 
     companion object {
@@ -41,11 +45,12 @@ class EventEntity(
             event.eventDate,
             event.createdAt,
             event.updatedAt,
+            event.deleteYN,
             event.id
         )
     }
 
     fun toDomain() = Event(
-        name, type, createdBy.toDomain(), owner, relationship, eventDate, createdAt, updatedAt, id!!
+        name, type, createdBy.toDomain(), owner, relationship, eventDate, createdAt, updatedAt, deleteYn, id!!
     )
 }
