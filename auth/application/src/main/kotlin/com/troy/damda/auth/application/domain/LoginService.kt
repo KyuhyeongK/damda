@@ -1,6 +1,7 @@
 package com.troy.damda.auth.application.domain
 
 import com.troy.damda.auth.application.port.`in`.LoginUseCase
+import com.troy.damda.auth.application.port.`in`.LoginUseCase.*
 import com.troy.damda.auth.application.port.out.CreateTokenPort
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import org.springframework.stereotype.Service
@@ -12,7 +13,7 @@ class LoginService(
     private val tokenProvider: JwtTokenProvider,
 ) : LoginUseCase {
 
-    override fun login(loginRequest: LoginUseCase.LoginRequest): LoginUseCase.LoginResponse {
+    override fun login(loginRequest: LoginRequest): LoginResponse {
         val user = loadUserPort.findByUserIdAndPassword(loginRequest.userId, loginRequest.password)
             ?: throw RuntimeException("User with id ${loginRequest.userId} doesn't exist")
         val accessToken = tokenProvider.createAccessToken(user.userMgmtNo!!)
@@ -20,6 +21,6 @@ class LoginService(
 
         createTokenPort.create(Token(user.userMgmtNo, refreshToken))
 
-        return LoginUseCase.LoginResponse(accessToken, refreshToken)
+        return LoginResponse(accessToken, refreshToken)
     }
 }

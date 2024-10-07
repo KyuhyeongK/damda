@@ -2,7 +2,10 @@ package com.troy.damda.recordbox.application.domain
 
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase
+import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase.*
+import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase.CreateEventResponse.*
 import com.troy.damda.recordbox.application.port.`in`.UpdateEventUseCase
+import com.troy.damda.recordbox.application.port.`in`.UpdateEventUseCase.*
 import com.troy.damda.recordbox.application.port.out.CreateEventPort
 import com.troy.damda.recordbox.application.port.out.LoadEventPort
 import com.troy.damda.recordbox.application.port.out.UpdateEventPort
@@ -18,10 +21,10 @@ class EventUseCaseService(
     private val loadUserPort: LoadUserPort,
 ) : CreateEventUseCase, UpdateEventUseCase {
     override fun createEvent(
-        userMgmtNo: Long, request: CreateEventUseCase.CreateEventRequest
-    ): CreateEventUseCase.CreateEventResponse {
+        userMgmtNo: Long, request: CreateEventRequest
+    ): CreateEventResponse {
         return loadUserPort.findByUserMgmtNo(userMgmtNo)?.let {
-            CreateEventUseCase.CreateEventResponse.fromDomain(
+            CreateEventResponse.fromDomain(
                 createEventPort.create(
                     Event(
                         request.eventName,
@@ -38,14 +41,14 @@ class EventUseCaseService(
     }
 
     override fun updateEvent(
-        userMgmtNo: Long, eventId: Long, request: UpdateEventUseCase.UpdateEventRequest
-    ): UpdateEventUseCase.UpdateEventResponse {
+        userMgmtNo: Long, eventId: Long, request: UpdateEventRequest
+    ): UpdateEventResponse {
 
         return loadEventPort.findById(eventId)?.let {
             it.update(
                 userMgmtNo, request.eventName, request.type, request.owner, request.relationship, request.eventDate
             )
-            UpdateEventUseCase.UpdateEventResponse.fromDomain(
+            UpdateEventResponse.fromDomain(
                 updateEventPort.update(it)
             )
         } ?: throw RuntimeException("Event with id $eventId not found.")
