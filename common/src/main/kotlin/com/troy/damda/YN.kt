@@ -8,5 +8,7 @@ enum class YN(val code: String) {
     companion object {
         fun fromCode(code: String) = entries.find { it.code == code }
             ?: throw IllegalArgumentException("$code 가 Y/N 이 아님")
+
+        fun of(y: Boolean) = if (y) Y else N
     }
 }

@@ -3,12 +3,14 @@ package com.troy.damda.recordbox.application.port.`in`
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import com.troy.damda.recordbox.application.domain.EventType
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 interface EventQuery {
 
-    fun getEventsFrom(userMgmtNo: Long): List<EventResult>
+    fun getEventsFrom(userMgmtNo: Long, pageable: Pageable): Page<EventResult>
 
     data class EventResult(
         val eventName: String,
