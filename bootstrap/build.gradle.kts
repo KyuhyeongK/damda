@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
@@ -10,4 +12,12 @@ dependencies {
     implementation(project(":record-box:adapter:record-box-adapter-out"))
     implementation(project(":auth:adapter:auth-adapter-in"))
     implementation(project(":auth:adapter:auth-adapter-out"))
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = true
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = false
 }
