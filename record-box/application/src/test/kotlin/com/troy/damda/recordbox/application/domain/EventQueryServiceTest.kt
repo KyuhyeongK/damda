@@ -1,16 +1,22 @@
 package com.troy.damda.recordbox.application.domain
 
-import com.troy.damda.PagingRequest
+import com.troy.damda.recordbox.application.port.`in`.EventQuery.GetEventsRequest
 import com.troy.damda.recordbox.application.port.out.LoadEventPort
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import java.time.LocalDate
 
 class EventQueryServiceTest : StringSpec({
     val sut = EventQueryService(object : LoadEventPort {
-        override fun findAllByCreatedBy(userMgmtNo: Long, pageable: Pageable): Page<Event> {
+        override fun findAllByCreatedBy(
+            userMgmtNo: Long,
+            iqryStartDate: LocalDate?,
+            iqryEndDate: LocalDate?,
+            pageable: Pageable
+        ): Page<Event> {
             return PageImpl(emptyList())
         }
 
@@ -20,7 +26,7 @@ class EventQueryServiceTest : StringSpec({
     })
 
     "이벤트 목록 반환 테스트" {
-        val events = sut.getEventsFrom(1, PagingRequest(0, 10))
+        val events = sut.getEventsFrom(1, GetEventsRequest(0, 20))
         events.ttcn shouldBeGreaterThanOrEqual 0
     }
 })

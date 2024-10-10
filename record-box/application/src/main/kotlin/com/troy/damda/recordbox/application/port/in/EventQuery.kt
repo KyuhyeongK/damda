@@ -10,7 +10,14 @@ import java.time.LocalDateTime
 
 interface EventQuery {
 
-    fun getEventsFrom(userMgmtNo: Long, pagingRequest: PagingRequest): PagingResult<EventResult>
+    fun getEventsFrom(userMgmtNo: Long, request: GetEventsRequest): PagingResult<EventResult>
+
+    data class GetEventsRequest(
+        val pageNo: Int,
+        val pageSize: Int,
+        val iqryStartDate: LocalDate? = null,
+        val iqryEndDate: LocalDate? = null,
+    )
 
     data class EventResult(
         val eventName: String,
