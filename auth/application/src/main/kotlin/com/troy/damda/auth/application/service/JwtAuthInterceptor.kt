@@ -1,14 +1,10 @@
 package com.troy.damda.auth.application.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.troy.damda.DamdaErrorResponse
-import com.troy.damda.DamdaException
-import com.troy.damda.auth.application.service.exception.TokenNeedException
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
+import com.troy.damda.auth.application.service.exception.TokenNeedException
 import com.troy.damda.logger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.method.HandlerMethod
@@ -21,7 +17,7 @@ class JwtAuthInterceptor(
     private val log = logger()
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        log.debug("doFilterInternal!!")
+        log.debug("preHandle!!")
 
         val handlerMethod = handler as? HandlerMethod
         val loginNeeded =
@@ -36,7 +32,7 @@ class JwtAuthInterceptor(
                 } ?: throw TokenNeedException()
             }
         }.onFailure {
-            handleAuthException(response, it as DamdaException)
+            throw it
         }.isSuccess
 
     }
@@ -53,14 +49,4 @@ class JwtAuthInterceptor(
         return UsernamePasswordAuthenticationToken(userMgmtNo, "")
     }
 
-    private fun handleAuthException(response: HttpServletResponse, exception: DamdaException) {
-        val authErrorResponse = DamdaErrorResponse(exception.errorCode, exception.message)
-
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.status = HttpServletResponse.SC_UNAUTHORIZED
-        response.outputStream.use {
-            it.write(ObjectMapper().writeValueAsBytes(authErrorResponse))
-            it.flush()
-        }
-    }
 }
