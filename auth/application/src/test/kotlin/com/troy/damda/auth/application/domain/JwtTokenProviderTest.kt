@@ -1,7 +1,8 @@
 package com.troy.damda.auth.application.domain
 
-import com.troy.damda.auth.application.domain.exception.MalformedTokenException
-import com.troy.damda.auth.application.domain.exception.TokenExpiredException
+import com.troy.damda.auth.application.service.exception.MalformedTokenException
+import com.troy.damda.auth.application.service.exception.TokenExpiredException
+import com.troy.damda.auth.application.service.JwtTokenProvider
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldNotBe

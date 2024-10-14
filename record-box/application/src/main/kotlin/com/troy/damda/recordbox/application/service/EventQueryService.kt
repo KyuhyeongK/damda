@@ -1,4 +1,4 @@
-package com.troy.damda.recordbox.application.domain
+package com.troy.damda.recordbox.application.service
 
 import com.troy.damda.PagingResult
 import com.troy.damda.YN

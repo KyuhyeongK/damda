@@ -1,5 +1,7 @@
-package com.troy.damda.auth.application.domain
+package com.troy.damda.auth.application.service
 
+import com.troy.damda.auth.application.domain.User
+import com.troy.damda.auth.application.domain.UserStatus
 import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
 import com.troy.damda.auth.application.port.`in`.UserManagementUseCase.*
 import com.troy.damda.auth.application.port.out.LoadUserPort

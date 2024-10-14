@@ -1,6 +1,5 @@
 package com.troy.damda.recordbox.application.port.`in`
 
-import com.troy.damda.PagingRequest
 import com.troy.damda.PagingResult
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.EventRelationshipType

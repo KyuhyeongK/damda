@@ -1,5 +1,6 @@
-package com.troy.damda.auth.application.domain
+package com.troy.damda.auth.application.service
 
+import com.troy.damda.auth.application.domain.Token
 import com.troy.damda.auth.application.port.`in`.LoginUseCase
 import com.troy.damda.auth.application.port.`in`.LoginUseCase.*
 import com.troy.damda.auth.application.port.out.CreateTokenPort

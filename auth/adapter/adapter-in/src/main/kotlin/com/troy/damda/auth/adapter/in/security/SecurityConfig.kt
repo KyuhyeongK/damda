@@ -1,7 +1,7 @@
 package com.troy.damda.auth.adapter.`in`.security
 
-import com.troy.damda.auth.application.domain.JwtAuthInterceptor
-import com.troy.damda.auth.application.domain.JwtTokenProvider
+import com.troy.damda.auth.application.service.JwtAuthInterceptor
+import com.troy.damda.auth.application.service.JwtTokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

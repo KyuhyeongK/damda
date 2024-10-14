@@ -1,9 +1,9 @@
-package com.troy.damda.auth.application.domain
+package com.troy.damda.auth.application.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.troy.damda.DamdaErrorResponse
 import com.troy.damda.DamdaException
-import com.troy.damda.auth.application.domain.exception.TokenNeedException
+import com.troy.damda.auth.application.service.exception.TokenNeedException
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
 import com.troy.damda.logger
 import jakarta.servlet.http.HttpServletRequest

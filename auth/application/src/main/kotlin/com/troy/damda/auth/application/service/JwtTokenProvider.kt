@@ -1,9 +1,9 @@
-package com.troy.damda.auth.application.domain
+package com.troy.damda.auth.application.service
 
-import com.troy.damda.auth.application.domain.exception.MalformedTokenException
-import com.troy.damda.auth.application.domain.exception.TokenAuthException
-import com.troy.damda.auth.application.domain.exception.TokenExpiredException
-import com.troy.damda.auth.application.domain.exception.WrongTokenException
+import com.troy.damda.auth.application.service.exception.MalformedTokenException
+import com.troy.damda.auth.application.service.exception.TokenAuthException
+import com.troy.damda.auth.application.service.exception.TokenExpiredException
+import com.troy.damda.auth.application.service.exception.WrongTokenException
 import com.troy.damda.logger
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts

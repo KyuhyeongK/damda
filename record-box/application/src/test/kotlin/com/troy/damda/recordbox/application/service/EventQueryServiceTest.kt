@@ -1,5 +1,6 @@
-package com.troy.damda.recordbox.application.domain
+package com.troy.damda.recordbox.application.service
 
+import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.port.`in`.EventQuery.GetEventsRequest
 import com.troy.damda.recordbox.application.port.out.LoadEventPort
 import io.kotest.core.spec.style.StringSpec

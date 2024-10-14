@@ -1,7 +1,8 @@
-package com.troy.damda.recordbox.application.domain
+package com.troy.damda.recordbox.application.service
 
-import com.troy.damda.YN
 import com.troy.damda.auth.application.port.out.LoadUserPort
+import com.troy.damda.recordbox.application.domain.Event
+import com.troy.damda.recordbox.application.domain.User
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase
 import com.troy.damda.recordbox.application.port.`in`.CreateEventUseCase.*
 import com.troy.damda.recordbox.application.port.`in`.DeleteEventUseCase

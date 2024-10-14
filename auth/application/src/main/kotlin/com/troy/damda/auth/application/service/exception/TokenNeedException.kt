@@ -1,4 +1,4 @@
-package com.troy.damda.auth.application.domain.exception
+package com.troy.damda.auth.application.service.exception
 
 import com.troy.damda.DamdaException
 

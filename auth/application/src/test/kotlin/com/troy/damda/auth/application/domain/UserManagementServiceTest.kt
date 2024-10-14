@@ -3,6 +3,7 @@ package com.troy.damda.auth.application.domain
 import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.auth.application.port.out.CreateUserPort
+import com.troy.damda.auth.application.service.UserManagementService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
