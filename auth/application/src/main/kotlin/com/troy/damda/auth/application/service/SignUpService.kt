@@ -2,17 +2,17 @@ package com.troy.damda.auth.application.service
 
 import com.troy.damda.auth.application.domain.User
 import com.troy.damda.auth.application.domain.UserStatus
-import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
-import com.troy.damda.auth.application.port.`in`.UserManagementUseCase.*
+import com.troy.damda.auth.application.port.`in`.SignUpUseCase
+import com.troy.damda.auth.application.port.`in`.SignUpUseCase.*
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.auth.application.port.out.CreateUserPort
 import org.springframework.stereotype.Service
 
 @Service
-class UserManagementService(
+class SignUpService(
     private val loadUserPort: LoadUserPort,
     private val createUserPort: CreateUserPort,
-) : UserManagementUseCase {
+) : SignUpUseCase {
 
     override fun signUp(request: SignUpRequest) {
         loadUserPort.findByUserIdAndPassword(request.userId, request.password)

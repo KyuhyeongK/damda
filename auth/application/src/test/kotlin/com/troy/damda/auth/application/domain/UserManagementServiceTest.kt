@@ -1,9 +1,9 @@
 package com.troy.damda.auth.application.domain
 
-import com.troy.damda.auth.application.port.`in`.UserManagementUseCase
+import com.troy.damda.auth.application.port.`in`.SignUpUseCase
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.auth.application.port.out.CreateUserPort
-import com.troy.damda.auth.application.service.UserManagementService
+import com.troy.damda.auth.application.service.SignUpService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
@@ -13,13 +13,13 @@ class UserManagementServiceTest : BehaviorSpec({
 
     val loadUserPort = mockk<LoadUserPort>()
     val createUserPort = mockk<CreateUserPort>()
-    val sut = UserManagementService(loadUserPort, createUserPort)
+    val sut = SignUpService(loadUserPort, createUserPort)
 
     given("회원가입 Dto가 주어졌을때") {
         val nickname = "testUser"
         val userId = "1111"
         val password = "pswd"
-        val request = UserManagementUseCase.SignUpRequest(nickname, userId, password)
+        val request = SignUpUseCase.SignUpRequest(nickname, userId, password)
 
         `when`("이미 존재하는 회원이라면") {
             every { loadUserPort.findByUserIdAndPassword(userId, password) } returns User(

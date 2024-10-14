@@ -1,6 +1,6 @@
 package com.troy.damda.auth.application.port.`in`
 
-interface UserManagementUseCase {
+interface SignUpUseCase {
 
     fun signUp(request: SignUpRequest)
 
