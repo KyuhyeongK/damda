@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/damda/v1/record-box")
-class PayHistoryCommandController(
+class CreatePayHistoryController(
     private val createPayHistoryUseCase: CreatePayHistoryUseCase,
 ) {
 
