@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable
 
 interface LoadPayHistoryPort {
     fun findAllByCreatedBy(userMgmtNo: Long, eventId: Long, pageable: Pageable): Page<PayHistory>
+
+    fun findById(id: Long): PayHistory?
 }

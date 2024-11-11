@@ -5,17 +5,26 @@ import com.troy.damda.YN
 import com.troy.damda.recordbox.application.domain.PayHistory
 import com.troy.damda.recordbox.application.port.out.CreatePayHistoryPort
 import com.troy.damda.recordbox.application.port.out.LoadPayHistoryPort
+import com.troy.damda.recordbox.application.port.out.UpdatePayHistoryPort
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class PayHistoryRepositoryAdapter(
     private val payHistoryRepository: PayHistoryRepository,
     private val jpaQueryFactory: JPAQueryFactory,
-) : QuerydslRepositorySupport(PayHistoryEntity::class.java), CreatePayHistoryPort, LoadPayHistoryPort {
+) : QuerydslRepositorySupport(PayHistoryEntity::class.java),
+    CreatePayHistoryPort,
+    LoadPayHistoryPort,
+    UpdatePayHistoryPort {
+
+    override fun findById(id: Long): PayHistory? {
+        return payHistoryRepository.findByIdOrNull(id)?.toDomain()
+    }
 
     override fun findAllByCreatedBy(userMgmtNo: Long, eventId: Long, pageable: Pageable): Page<PayHistory> {
         val payHistory = QPayHistoryEntity.payHistoryEntity
@@ -49,4 +58,7 @@ class PayHistoryRepositoryAdapter(
         return payHistoryRepository.save(PayHistoryEntity.fromDomain(payHistory)).toDomain()
     }
 
+    override fun update(payHistory: PayHistory): PayHistory {
+        return payHistoryRepository.save(PayHistoryEntity.fromDomain(payHistory)).toDomain()
+    }
 }
