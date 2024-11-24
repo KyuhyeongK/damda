@@ -1,0 +1,76 @@
+package com.troy.damda.recordbox.application.service.event
+
+import com.troy.damda.auth.application.port.out.LoadUserPort
+import com.troy.damda.recordbox.application.domain.Event
+import com.troy.damda.recordbox.application.domain.User
+import com.troy.damda.recordbox.application.port.`in`.event.CreateEventUseCase
+import com.troy.damda.recordbox.application.port.`in`.event.CreateEventUseCase.*
+import com.troy.damda.recordbox.application.port.`in`.event.DeleteEventUseCase
+import com.troy.damda.recordbox.application.port.`in`.event.UpdateEventUseCase
+import com.troy.damda.recordbox.application.port.`in`.event.UpdateEventUseCase.*
+import com.troy.damda.recordbox.application.port.out.event.CreateEventPort
+import com.troy.damda.recordbox.application.port.out.event.DeleteEventPort
+import com.troy.damda.recordbox.application.port.out.event.LoadEventPort
+import com.troy.damda.recordbox.application.port.out.event.UpdateEventPort
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+@Transactional
+class EventUseCaseService(
+    private val createEventPort: CreateEventPort,
+    private val loadEventPort: LoadEventPort,
+    private val updateEventPort: UpdateEventPort,
+    private val loadUserPort: LoadUserPort,
+    private val deleteEventPort: DeleteEventPort,
+) : CreateEventUseCase, UpdateEventUseCase, DeleteEventUseCase {
+    override fun createEvent(
+        userMgmtNo: Long, request: CreateEventRequest
+    ): CreateEventResponse {
+        return loadUserPort.findByUserMgmtNo(userMgmtNo)?.let {
+            CreateEventResponse.fromDomain(
+                createEventPort.create(
+                    Event(
+                        request.eventName,
+                        request.type,
+                        User(it.nickname, userMgmtNo),
+                        request.owner,
+                        request.relationship,
+                        request.eventDate,
+                    )
+                )
+            )
+        } ?: throw RuntimeException("User with id $userMgmtNo not found.")
+
+    }
+
+    override fun updateEvent(
+        userMgmtNo: Long, eventId: Long, request: UpdateEventRequest
+    ): UpdateEventResponse {
+
+        return loadEventPort.findById(eventId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 수정 요청")
+            }
+        }?.let {
+            it.update(
+                request.eventName, request.type, request.owner, request.relationship, request.eventDate
+            )
+            UpdateEventResponse.fromDomain(
+                updateEventPort.update(it)
+            )
+        } ?: throw RuntimeException("Event with id $eventId not found.")
+
+    }
+
+    override fun deleteEvent(userMgmtNo: Long, eventId: Long) {
+        loadEventPort.findById(eventId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 삭제 요청")
+            }
+        }?.let {
+            it.delete()
+            deleteEventPort.delete(it)
+        } ?: throw RuntimeException("Event with id $eventId not found.")
+    }
+}

@@ -1,8 +1,9 @@
 package com.troy.damda.recordbox.application.service
 
 import com.troy.damda.recordbox.application.domain.Event
-import com.troy.damda.recordbox.application.port.`in`.EventQuery.GetEventsRequest
-import com.troy.damda.recordbox.application.port.out.LoadEventPort
+import com.troy.damda.recordbox.application.port.`in`.event.EventQuery.GetEventsRequest
+import com.troy.damda.recordbox.application.port.out.event.LoadEventPort
+import com.troy.damda.recordbox.application.service.event.EventQueryService
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import org.springframework.data.domain.Page
