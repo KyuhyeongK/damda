@@ -25,6 +25,15 @@ class PayHistory(
 
         this.type = type ?: this.type
         this.payAmount = payAmount ?: this.payAmount
-        updatedAt = LocalDateTime.now()
+        this.updatedAt = LocalDateTime.now()
     }
+
+    fun delete() {
+        if (this.deleteYN == YN.Y) {
+            throw RuntimeException("이미 삭제된 납부내역")
+        }
+        this.deleteYN = YN.Y
+        this.updatedAt = LocalDateTime.now()
+    }
+
 }

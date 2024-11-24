@@ -6,9 +6,11 @@ import com.troy.damda.recordbox.application.domain.PayHistory
 import com.troy.damda.recordbox.application.domain.User
 import com.troy.damda.recordbox.application.port.`in`.CreatePayHistoryUseCase
 import com.troy.damda.recordbox.application.port.`in`.CreatePayHistoryUseCase.*
+import com.troy.damda.recordbox.application.port.`in`.DeletePayHistoryUseCase
 import com.troy.damda.recordbox.application.port.`in`.UpdatePayHistoryUseCase
 import com.troy.damda.recordbox.application.port.`in`.UpdatePayHistoryUseCase.*
 import com.troy.damda.recordbox.application.port.out.CreatePayHistoryPort
+import com.troy.damda.recordbox.application.port.out.DeletePayHistoryPort
 import com.troy.damda.recordbox.application.port.out.LoadPayHistoryPort
 import com.troy.damda.recordbox.application.port.out.UpdatePayHistoryPort
 import org.springframework.stereotype.Service
@@ -22,7 +24,10 @@ class PayHistoryUseCaseService(
     private val createPayHistoryPort: CreatePayHistoryPort,
     private val loadPayHistoryPort: LoadPayHistoryPort,
     private val updatePayHistoryPort: UpdatePayHistoryPort,
-) : CreatePayHistoryUseCase, UpdatePayHistoryUseCase {
+    private val deletePayHistoryPort: DeletePayHistoryPort,
+) : CreatePayHistoryUseCase,
+    UpdatePayHistoryUseCase,
+    DeletePayHistoryUseCase {
 
     override fun createPayHistory(
         userMgmtNo: Long,
@@ -58,5 +63,16 @@ class PayHistoryUseCaseService(
             it.update(request.type, request.payAmount)
             UpdatePayHistoryResponse.fromDomain(updatePayHistoryPort.update(it))
         } ?: throw RuntimeException("PayHistory with id ${request.payHistoryId} not found.")
+    }
+
+    override fun deletePayHistory(userMgmtNo: Long, eventId: Long, payHistoryId: Long) {
+        loadPayHistoryPort.findById(payHistoryId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 삭제 요청")
+            }
+        }?.let {
+            it.delete()
+            deletePayHistoryPort.delete(it)
+        } ?: throw RuntimeException("PayHistory with id $payHistoryId not found.")
     }
 }

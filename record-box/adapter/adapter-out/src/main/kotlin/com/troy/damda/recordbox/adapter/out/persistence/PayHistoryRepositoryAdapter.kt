@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import com.troy.damda.YN
 import com.troy.damda.recordbox.application.domain.PayHistory
 import com.troy.damda.recordbox.application.port.out.CreatePayHistoryPort
+import com.troy.damda.recordbox.application.port.out.DeletePayHistoryPort
 import com.troy.damda.recordbox.application.port.out.LoadPayHistoryPort
 import com.troy.damda.recordbox.application.port.out.UpdatePayHistoryPort
 import org.springframework.data.domain.Page
@@ -20,7 +21,8 @@ class PayHistoryRepositoryAdapter(
 ) : QuerydslRepositorySupport(PayHistoryEntity::class.java),
     CreatePayHistoryPort,
     LoadPayHistoryPort,
-    UpdatePayHistoryPort {
+    UpdatePayHistoryPort,
+    DeletePayHistoryPort {
 
     override fun findById(id: Long): PayHistory? {
         return payHistoryRepository.findByIdOrNull(id)?.toDomain()
@@ -60,5 +62,9 @@ class PayHistoryRepositoryAdapter(
 
     override fun update(payHistory: PayHistory): PayHistory {
         return payHistoryRepository.save(PayHistoryEntity.fromDomain(payHistory)).toDomain()
+    }
+
+    override fun delete(payHistory: PayHistory) {
+        payHistoryRepository.save(PayHistoryEntity.fromDomain(payHistory))
     }
 }
