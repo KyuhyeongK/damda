@@ -48,10 +48,13 @@ class PayHistoryUseCaseService(
         userMgmtNo: Long,
         request: UpdatePayHistoryRequest
     ): UpdatePayHistoryResponse {
-        return loadPayHistoryPort.findById(request.payHistoryId)?.let {
-            require(it.createdBy.id == userMgmtNo) { "사관번호 불일치" }
-            require(it.eventId == request.eventId) { "납부내역ID와 연결된 이벤트ID 불일치" }
-
+        return loadPayHistoryPort.findById(request.payHistoryId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 수정 요청")
+            } else if (it.eventId != request.eventId) {
+                throw RuntimeException("납부내역ID와 연결된 이벤트ID 불일치")
+            }
+        }?.let {
             it.update(request.type, request.payAmount)
             UpdatePayHistoryResponse.fromDomain(updatePayHistoryPort.update(it))
         } ?: throw RuntimeException("PayHistory with id ${request.payHistoryId} not found.")

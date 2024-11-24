@@ -1,5 +1,6 @@
 package com.troy.damda.recordbox.application.service
 
+import com.troy.damda.YN
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.User
@@ -48,19 +49,28 @@ class EventUseCaseService(
         userMgmtNo: Long, eventId: Long, request: UpdateEventRequest
     ): UpdateEventResponse {
 
-        return loadEventPort.findById(eventId)?.let {
+        return loadEventPort.findById(eventId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 수정 요청")
+            }
+        }?.let {
             it.update(
-                userMgmtNo, request.eventName, request.type, request.owner, request.relationship, request.eventDate
+                request.eventName, request.type, request.owner, request.relationship, request.eventDate
             )
             UpdateEventResponse.fromDomain(
                 updateEventPort.update(it)
             )
         } ?: throw RuntimeException("Event with id $eventId not found.")
+
     }
 
     override fun deleteEvent(userMgmtNo: Long, eventId: Long) {
-        loadEventPort.findById(eventId)?.let {
-            it.delete(userMgmtNo)
+        loadEventPort.findById(eventId)?.also {
+            if (it.createdBy.id != userMgmtNo) {
+                throw RuntimeException("허용되지 않은 사용자의 삭제 요청")
+            }
+        }?.let {
+            it.delete()
             deleteEventPort.delete(it)
         } ?: throw RuntimeException("Event with id $eventId not found.")
     }
