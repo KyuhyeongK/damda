@@ -9,7 +9,7 @@ import com.troy.damda.recordbox.application.port.`in`.PayHistoryQuery.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/damda/v1/record-box")
+@RequestMapping("/damda/v1/record-box/events")
 class PayHistoryQueryController(
     private val payHistoryQuery: PayHistoryQuery,
 ) {

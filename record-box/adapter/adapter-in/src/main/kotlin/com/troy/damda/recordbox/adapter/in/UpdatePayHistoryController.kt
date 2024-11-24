@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal
 
 @RestController
-@RequestMapping("/damda/v1/record-box")
+@RequestMapping("/damda/v1/record-box/events")
 class UpdatePayHistoryController(
     private val updatePayHistoryUseCase: UpdatePayHistoryUseCase,
 ) {
