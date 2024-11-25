@@ -18,17 +18,22 @@ class PayHistoryQueryService(
     override fun getPayHistory(
         userMgmtMo: Long, request: GetPayHistoryRequest
     ): PagingResult<GetPayHistoryResult> {
-        val jpaPagingRequest = PageRequest.of(request.pageNo, request.pageSize)
-
-        return loadPayHistoryPort.findAllByCreatedBy(userMgmtMo, request.eventId, jpaPagingRequest)
-            .map { GetPayHistoryResult.fromPayHistory(it) }.let {
-                PagingResult(
-                    pageNo = it.number,
-                    pageSize = it.size,
-                    ttcn = it.totalElements,
-                    nextPageExisYN = YN.of(it.hasNext()),
-                    contents = it.content,
-                )
+        return loadEventPort.findById(request.eventId)?.also {
+            if (it.createdBy.id != userMgmtMo) {
+                throw RuntimeException("$userMgmtMo 사용자가 작성하지 않은 이벤트")
             }
+        }?.let {
+            val jpaPagingRequest = PageRequest.of(request.pageNo, request.pageSize)
+            loadPayHistoryPort.findAllByCreatedBy(userMgmtMo, request.eventId, jpaPagingRequest)
+                .map { GetPayHistoryResult.fromPayHistory(it) }.let {
+                    PagingResult(
+                        pageNo = it.number,
+                        pageSize = it.size,
+                        ttcn = it.totalElements,
+                        nextPageExisYN = YN.of(it.hasNext()),
+                        contents = it.content,
+                    )
+                }
+        } ?: throw RuntimeException("eventId ${request.eventId} not found")
     }
 }
