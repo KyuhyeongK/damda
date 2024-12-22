@@ -1,7 +1,7 @@
 package com.troy.damda.auth.application.service
 
+import com.troy.damda.DamdaException
 import com.troy.damda.auth.application.port.`in`.UserMgmtNo
-import com.troy.damda.auth.application.service.exception.TokenNeedException
 import com.troy.damda.logger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -29,7 +29,7 @@ class JwtAuthInterceptor(
                     log.debug("Bearer 토큰 => $it")
                     val userMgmtNo = jwtTokenProvider.getUserMgmtNoFromToken(it)
                     SecurityContextHolder.getContext().authentication = getSpringSecurityAuthenticationFromUserMgmtNo(userMgmtNo)
-                } ?: throw TokenNeedException()
+                } ?: throw DamdaException(DamdaException.ErrorCode.TOKEN_NEED)
             }
         }.onFailure {
             throw it

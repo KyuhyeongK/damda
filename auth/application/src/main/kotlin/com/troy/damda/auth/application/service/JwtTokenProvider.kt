@@ -1,9 +1,7 @@
 package com.troy.damda.auth.application.service
 
-import com.troy.damda.auth.application.service.exception.MalformedTokenException
-import com.troy.damda.auth.application.service.exception.TokenAuthException
-import com.troy.damda.auth.application.service.exception.TokenExpiredException
-import com.troy.damda.auth.application.service.exception.WrongTokenException
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.ErrorCode
 import com.troy.damda.logger
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -69,13 +67,13 @@ class JwtTokenProvider(
             return subject.toLong()
 
         } catch (e: ExpiredJwtException) {
-            throw TokenExpiredException(e)
+            throw DamdaException(ErrorCode.TOKEN_EXPIRED, cause = e)
         } catch (e: MalformedJwtException) {
-            throw MalformedTokenException(e)
+            throw DamdaException(ErrorCode.MALFORMED_TOKEN, cause = e)
         } catch (e: SignatureException) {
-            throw WrongTokenException(e)
+            throw DamdaException(ErrorCode.WRONG_TOKEN, cause = e)
         } catch (e: Exception) {
-            throw TokenAuthException(e)
+            throw DamdaException(ErrorCode.TOKEN_AUTH, cause = e)
         }
 
     }

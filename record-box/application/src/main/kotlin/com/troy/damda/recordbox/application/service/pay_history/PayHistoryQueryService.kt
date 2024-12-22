@@ -1,5 +1,7 @@
 package com.troy.damda.recordbox.application.service.pay_history
 
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.ErrorCode
 import com.troy.damda.PagingResult
 import com.troy.damda.YN
 import com.troy.damda.recordbox.application.port.`in`.pay_history.PayHistoryQuery
@@ -20,7 +22,7 @@ class PayHistoryQueryService(
     ): PagingResult<GetPayHistoryResult> {
         return loadEventPort.findById(request.eventId)?.also {
             if (it.createdBy.id != userMgmtMo) {
-                throw RuntimeException("$userMgmtMo 사용자가 작성하지 않은 이벤트")
+                throw DamdaException(ErrorCode.USER_MGMT_NO_MISMATCH, "$userMgmtMo 사용자가 작성하지 않은 이벤트")
             }
         }?.let {
             val jpaPagingRequest = PageRequest.of(request.pageNo, request.pageSize)
@@ -34,6 +36,6 @@ class PayHistoryQueryService(
                         contents = it.content,
                     )
                 }
-        } ?: throw RuntimeException("eventId ${request.eventId} not found")
+        } ?: throw DamdaException(ErrorCode.EVEN_NOT_FOUND, "eventId ${request.eventId} not found")
     }
 }

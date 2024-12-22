@@ -1,5 +1,6 @@
 package com.troy.damda.auth.application.service
 
+import com.troy.damda.DamdaException
 import com.troy.damda.auth.application.domain.Token
 import com.troy.damda.auth.application.port.`in`.LoginUseCase
 import com.troy.damda.auth.application.port.`in`.LoginUseCase.*
@@ -16,7 +17,7 @@ class LoginService(
 
     override fun login(loginRequest: LoginRequest): LoginResponse {
         val user = loadUserPort.findByUserIdAndPassword(loginRequest.userId, loginRequest.password)
-            ?: throw RuntimeException("User with id ${loginRequest.userId} doesn't exist")
+            ?: throw DamdaException(DamdaException.ErrorCode.USER_ID_NOT_FOUND, "User with id ${loginRequest.userId} not found")
         val accessToken = tokenProvider.createAccessToken(user.userMgmtNo!!)
         val refreshToken = tokenProvider.createRefreshToken()
 

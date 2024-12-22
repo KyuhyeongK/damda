@@ -1,5 +1,7 @@
 package com.troy.damda.recordbox.application.service.pay_history
 
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.*
 import com.troy.damda.YN
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.recordbox.application.domain.PayHistory
@@ -46,7 +48,7 @@ class PayHistoryUseCaseService(
                     )
                 )
             )
-        } ?: throw RuntimeException("User with id $userMgmtNo not found.")
+        } ?: throw DamdaException(ErrorCode.USER_MGMT_NO_NOT_FOUND, "사관번호: $userMgmtNo")
     }
 
     override fun updatePayHistory(
@@ -55,24 +57,24 @@ class PayHistoryUseCaseService(
     ): UpdatePayHistoryResponse {
         return loadPayHistoryPort.findById(request.payHistoryId)?.also {
             if (it.createdBy.id != userMgmtNo) {
-                throw RuntimeException("허용되지 않은 사용자의 수정 요청")
+                throw DamdaException(ErrorCode.USER_MGMT_NO_MISMATCH, "허용되지 않은 사용자의 수정 요청")
             } else if (it.eventId != request.eventId) {
-                throw RuntimeException("납부내역ID와 연결된 이벤트ID 불일치")
+                throw DamdaException(ErrorCode.EVENT_ID_MISMATCH, "납부내역ID와 연결된 이벤트ID 불일치")
             }
         }?.let {
             it.update(request.type, request.payAmount)
             UpdatePayHistoryResponse.fromDomain(updatePayHistoryPort.update(it))
-        } ?: throw RuntimeException("PayHistory with id ${request.payHistoryId} not found.")
+        } ?: throw DamdaException(ErrorCode.PAY_HISTORY_NOT_FOUND, "PayHistory with id ${request.payHistoryId} not found.")
     }
 
     override fun deletePayHistory(userMgmtNo: Long, eventId: Long, payHistoryId: Long) {
         loadPayHistoryPort.findById(payHistoryId)?.also {
             if (it.createdBy.id != userMgmtNo) {
-                throw RuntimeException("허용되지 않은 사용자의 삭제 요청")
+                throw DamdaException(ErrorCode.USER_MGMT_NO_MISMATCH, "허용되지 않은 사용자의 삭제 요청")
             }
         }?.let {
             it.delete()
             deletePayHistoryPort.delete(it)
-        } ?: throw RuntimeException("PayHistory with id $payHistoryId not found.")
+        } ?: throw DamdaException(ErrorCode.PAY_HISTORY_NOT_FOUND, "PayHistory with id $payHistoryId not found.")
     }
 }

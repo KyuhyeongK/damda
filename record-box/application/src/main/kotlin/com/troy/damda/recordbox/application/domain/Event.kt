@@ -1,5 +1,7 @@
 package com.troy.damda.recordbox.application.domain
 
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.ErrorCode
 import com.troy.damda.YN
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,7 +26,7 @@ class Event(
         eventDate: LocalDate? = null,
     ) {
         if (this.deleteYN == YN.Y) {
-            throw RuntimeException("이미 삭제된 이벤트")
+            throw DamdaException(ErrorCode.EVEN_NOT_FOUND, "이미 삭제된 이벤트")
         }
         this.name = name ?: this.name
         this.type = type ?: this.type
@@ -36,7 +38,7 @@ class Event(
 
     fun delete() {
         if (this.deleteYN == YN.Y) {
-            throw RuntimeException("이미 삭제된 이벤트")
+            throw DamdaException(ErrorCode.EVEN_NOT_FOUND, "이미 삭제된 이벤트")
         }
         this.deleteYN = YN.Y
         this.updatedAt = LocalDateTime.now()

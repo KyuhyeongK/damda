@@ -1,5 +1,7 @@
 package com.troy.damda.recordbox.application.service.event
 
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.ErrorCode
 import com.troy.damda.auth.application.port.out.LoadUserPort
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.User
@@ -40,7 +42,7 @@ class EventUseCaseService(
                     )
                 )
             )
-        } ?: throw RuntimeException("User with id $userMgmtNo not found.")
+        } ?: throw DamdaException(ErrorCode.USER_MGMT_NO_NOT_FOUND, "사관번호: $userMgmtNo")
 
     }
 
@@ -50,7 +52,7 @@ class EventUseCaseService(
 
         return loadEventPort.findById(eventId)?.also {
             if (it.createdBy.id != userMgmtNo) {
-                throw RuntimeException("허용되지 않은 사용자의 수정 요청")
+                throw DamdaException(ErrorCode.USER_MGMT_NO_MISMATCH, "허용되지 않은 사용자의 수정 요청")
             }
         }?.let {
             it.update(
@@ -59,18 +61,18 @@ class EventUseCaseService(
             UpdateEventResponse.fromDomain(
                 updateEventPort.update(it)
             )
-        } ?: throw RuntimeException("Event with id $eventId not found.")
+        } ?: throw DamdaException(ErrorCode.EVEN_NOT_FOUND, "Event with id $eventId not found.")
 
     }
 
     override fun deleteEvent(userMgmtNo: Long, eventId: Long) {
         loadEventPort.findById(eventId)?.also {
             if (it.createdBy.id != userMgmtNo) {
-                throw RuntimeException("허용되지 않은 사용자의 삭제 요청")
+                throw DamdaException(ErrorCode.USER_MGMT_NO_MISMATCH, "허용되지 않은 사용자의 삭제 요청")
             }
         }?.let {
             it.delete()
             deleteEventPort.delete(it)
-        } ?: throw RuntimeException("Event with id $eventId not found.")
+        } ?: throw DamdaException(ErrorCode.EVEN_NOT_FOUND, "Event with id $eventId not found.")
     }
 }

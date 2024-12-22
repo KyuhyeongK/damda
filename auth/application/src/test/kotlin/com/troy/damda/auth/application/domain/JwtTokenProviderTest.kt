@@ -1,10 +1,11 @@
 package com.troy.damda.auth.application.domain
 
-import com.troy.damda.auth.application.service.exception.MalformedTokenException
-import com.troy.damda.auth.application.service.exception.TokenExpiredException
+import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.*
 import com.troy.damda.auth.application.service.JwtTokenProvider
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 class JwtTokenProviderTest : StringSpec({
@@ -25,13 +26,15 @@ class JwtTokenProviderTest : StringSpec({
         val sut = JwtTokenProvider(secretKey, -10000, -10000)
         val token = sut.createAccessToken(userMgmtNo)
 
-        shouldThrow<TokenExpiredException> { sut.getUserMgmtNoFromToken(token) }
+        val err = shouldThrow<DamdaException> { sut.getUserMgmtNoFromToken(token) }
+        err.errorCode shouldBe ErrorCode.TOKEN_EXPIRED
     }
 
     "이상한 토큰을 파싱하는 경우 예외 발생" {
         val sut = JwtTokenProvider(secretKey, 6000000, 6000000)
 
-        shouldThrow<MalformedTokenException> { sut.getUserMgmtNoFromToken("token") }
+        val err = shouldThrow<DamdaException> { sut.getUserMgmtNoFromToken("token") }
+        err.errorCode shouldBe ErrorCode.MALFORMED_TOKEN
     }
 
 

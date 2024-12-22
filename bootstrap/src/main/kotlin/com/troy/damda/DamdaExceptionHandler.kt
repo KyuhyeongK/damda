@@ -17,7 +17,7 @@ class DamdaExceptionHandler {
         log.debug("예외 발생 => {}", e.message)
         response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
 
-        return DamdaErrorResponse(e.errorCode, e.message)
+        return DamdaErrorResponse(e.errorCode.code, e.errorMessage)
     }
 
     @ExceptionHandler(Exception::class)
