@@ -1,6 +1,7 @@
 package com.troy.damda.recordbox.application.domain
 
 import com.troy.damda.DamdaException
+import com.troy.damda.DamdaException.ErrorCode
 import com.troy.damda.YN
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -21,7 +22,7 @@ class PayHistory(
         payAmount: BigDecimal? = null,
     ) {
         if (this.deleteYN == YN.Y) {
-            throw DamdaException(DamdaException.ErrorCode.PAY_HISTORY_NOT_FOUND, "이미 삭제된 납부내역")
+            throw DamdaException(ErrorCode.PAY_HISTORY_NOT_FOUND, "이미 삭제된 납부내역")
         }
 
         this.type = type ?: this.type
@@ -31,7 +32,7 @@ class PayHistory(
 
     fun delete() {
         if (this.deleteYN == YN.Y) {
-            throw DamdaException(DamdaException.ErrorCode.PAY_HISTORY_NOT_FOUND, "이미 삭제된 납부내역")
+            throw DamdaException(ErrorCode.PAY_HISTORY_NOT_FOUND, "이미 삭제된 납부내역")
         }
         this.deleteYN = YN.Y
         this.updatedAt = LocalDateTime.now()
