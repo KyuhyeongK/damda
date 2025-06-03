@@ -1,6 +1,7 @@
 package com.troy.damda.recordbox.application.service
 
 import com.troy.damda.recordbox.application.domain.Event
+import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import com.troy.damda.recordbox.application.domain.EventType
 import com.troy.damda.recordbox.application.port.`in`.event.EventQuery.GetEventsRequest
 import com.troy.damda.recordbox.application.port.out.event.LoadEventPort
@@ -19,6 +20,7 @@ class EventQueryServiceTest : StringSpec({
             iqryStartDate: LocalDate?,
             iqryEndDate: LocalDate?,
             eventTypes: List<EventType>?,
+            eventRelationshipTypes: List<EventRelationshipType>?,
             pageable: Pageable
         ): Page<Event> {
             return PageImpl(emptyList())

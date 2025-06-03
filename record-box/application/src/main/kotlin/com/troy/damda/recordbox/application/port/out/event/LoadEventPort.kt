@@ -1,6 +1,7 @@
 package com.troy.damda.recordbox.application.port.out.event
 
 import com.troy.damda.recordbox.application.domain.Event
+import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import com.troy.damda.recordbox.application.domain.EventType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -12,7 +13,8 @@ interface LoadEventPort {
         iqryStartDate: LocalDate?,
         iqryEndDate: LocalDate?,
         eventTypes: List<EventType>?,
-        pageable: Pageable
+        eventRelationshipTypes: List<EventRelationshipType>?,
+        pageable: Pageable,
     ): Page<Event>
 
     fun findById(id: Long): Event?

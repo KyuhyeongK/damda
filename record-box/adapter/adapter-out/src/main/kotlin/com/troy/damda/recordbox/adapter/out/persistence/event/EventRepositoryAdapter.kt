@@ -3,6 +3,7 @@ package com.troy.damda.recordbox.adapter.out.persistence.event
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.troy.damda.YN
 import com.troy.damda.recordbox.application.domain.Event
+import com.troy.damda.recordbox.application.domain.EventRelationshipType
 import com.troy.damda.recordbox.application.domain.EventType
 import com.troy.damda.recordbox.application.port.out.event.CreateEventPort
 import com.troy.damda.recordbox.application.port.out.event.DeleteEventPort
@@ -28,6 +29,7 @@ class EventRepositoryAdapter(
         iqryStartDate: LocalDate?,
         iqryEndDate: LocalDate?,
         eventTypes: List<EventType>?,
+        eventRelationshipTypes: List<EventRelationshipType>?,
         pageable: Pageable
     ): Page<Event> {
         val event = QEventEntity.eventEntity
@@ -41,6 +43,7 @@ class EventRepositoryAdapter(
                     .and(iqryStartDate?.let { event.eventDate.goe(it) })
                     .and(iqryEndDate?.let { event.eventDate.loe(it) })
                     .and(eventTypes?.let { event.type.`in`(it) })
+                    .and(eventRelationshipTypes?.let { event.relationship.`in`(it) })
             )
         val totalCount = countQuery.fetchOne() ?: 0
 
@@ -52,6 +55,7 @@ class EventRepositoryAdapter(
                     .and(iqryStartDate?.let { event.eventDate.goe(it) })
                     .and(iqryEndDate?.let { event.eventDate.loe(it) })
                     .and(eventTypes?.let { event.type.`in`(it) })
+                    .and(eventRelationshipTypes?.let { event.relationship.`in`(it) })
             )
         val events = querydsl?.applyPagination(pageable, selectQuery)?.fetch()?.map { it.toDomain() } ?: emptyList()
 

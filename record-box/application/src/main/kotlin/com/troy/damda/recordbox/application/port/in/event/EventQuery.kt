@@ -17,6 +17,7 @@ interface EventQuery {
         val iqryStartDate: LocalDate? = null,
         val iqryEndDate: LocalDate? = null,
         val eventTypes: List<EventType>? = null,
+        val eventRelationshipTypes: List<EventRelationshipType>? = null,
     )
 
     data class EventResult(

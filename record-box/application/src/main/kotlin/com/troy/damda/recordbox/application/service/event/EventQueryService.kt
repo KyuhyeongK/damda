@@ -21,6 +21,7 @@ class EventQueryService(
             request.iqryStartDate,
             request.iqryEndDate,
             request.eventTypes,
+            request.eventRelationshipTypes,
             jpaPagingRequest
         )
             .map { EventResult.fromEvent(it) }
