@@ -16,6 +16,7 @@ interface EventQuery {
         val pageSize: Int,
         val iqryStartDate: LocalDate? = null,
         val iqryEndDate: LocalDate? = null,
+        val eventTypes: List<EventType>? = null,
     )
 
     data class EventResult(
