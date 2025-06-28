@@ -2,29 +2,32 @@ package com.troy.damda.auth.application.service
 
 import com.troy.damda.DamdaException
 import com.troy.damda.DamdaException.ErrorCode
+import com.troy.damda.YamlPropertySourceFactory
+import com.troy.damda.auth.application.service.config.JwtProperties
 import com.troy.damda.logger
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.SignatureException
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
+import java.security.SignatureException
 import java.util.*
 
-@Component
+@Configuration
+@PropertySource("classpath:jwt-\${spring.profiles.active}.yaml", factory = YamlPropertySourceFactory::class)
+@EnableConfigurationProperties(JwtProperties::class)
 class JwtTokenProvider(
-    @Value("\${jwt.secret}") private val secretKey: String,
-    @Value("\${jwt.expiration}") private val expiration: Long,
-    @Value("\${jwt.refresh.expiration}") private val refreshExpiration: Long,
+    private val jwtProperties: JwtProperties,
 ) {
 
-    private val hmacShaKey = Keys.hmacShaKeyFor(secretKey.toByteArray(Charsets.UTF_8))
+    private val hmacShaKey = Keys.hmacShaKeyFor(jwtProperties.accessToken.secret.toByteArray(Charsets.UTF_8))
     private val log = logger()
 
     fun createAccessToken(userMgmtNo: Long): String {
         val now = Date()
-        val expirationDate = Date(now.time + expiration)
+        val expirationDate = Date(now.time + jwtProperties.accessToken.expiration)
 
         val jwtToken = Jwts.builder()
             .subject(userMgmtNo.toString())
@@ -39,7 +42,7 @@ class JwtTokenProvider(
 
     fun createRefreshToken(): String {
         val now = Date()
-        val expirationDate = Date(now.time + refreshExpiration)
+        val expirationDate = Date(now.time + jwtProperties.refreshToken.expiration)
 
         val refreshToken = Jwts.builder()
             .issuer("damda")
@@ -53,7 +56,7 @@ class JwtTokenProvider(
 
     fun getUserMgmtNoFromToken(token: String): Long {
 
-        log.debug("비밀키, 만료시간 로깅 => {}, {}", secretKey, expiration)
+        log.debug("비밀키, 만료시간 로깅 => {}, {}", jwtProperties.accessToken.secret, jwtProperties.accessToken.expiration)
 
         try {
             val subject = Jwts.parser()

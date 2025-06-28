@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %magenta([%thread]) %highlight([%-5level]) %logger{} - %msg %n" />
-    <springProfile name="dev">
+    <property name="CONSOLE_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %magenta([%thread]) %highlight([%-5level]) %logger{} - %msg %n"/>
+    <springProfile name="local">
         <logger name="root" level="DEBUG"/>
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
