@@ -1,6 +1,7 @@
 package com.troy.damda.recordbox.adapter.out.persistence.event
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import com.troy.damda.PagingResult
 import com.troy.damda.YN
 import com.troy.damda.recordbox.application.domain.Event
 import com.troy.damda.recordbox.application.domain.EventRelationshipType
@@ -9,8 +10,6 @@ import com.troy.damda.recordbox.application.port.out.event.CreateEventPort
 import com.troy.damda.recordbox.application.port.out.event.DeleteEventPort
 import com.troy.damda.recordbox.application.port.out.event.LoadEventPort
 import com.troy.damda.recordbox.application.port.out.event.UpdateEventPort
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.data.repository.findByIdOrNull
@@ -31,7 +30,7 @@ class EventRepositoryAdapter(
         eventTypes: List<EventType>?,
         eventRelationshipTypes: List<EventRelationshipType>?,
         pageable: Pageable
-    ): Page<Event> {
+    ): PagingResult<Event> {
         val event = QEventEntity.eventEntity
 
         // 총 건수 조회
@@ -58,8 +57,13 @@ class EventRepositoryAdapter(
                     .and(eventRelationshipTypes?.let { event.relationship.`in`(it) })
             )
         val events = querydsl?.applyPagination(pageable, selectQuery)?.fetch()?.map { it.toDomain() } ?: emptyList()
-
-        return PageImpl(events, pageable, totalCount)
+        return PagingResult(
+            pageNo = pageable.pageNumber,
+            pageSize = pageable.pageSize,
+            ttcn = totalCount,
+            nextPageExisYN = YN.of(totalCount > pageable.pageNumber * pageable.pageSize + events.size),
+            contents = events
+        )
     }
 
     override fun findById(id: Long): Event? {

@@ -1,7 +1,6 @@
 package com.troy.damda.recordbox.application.service.event
 
 import com.troy.damda.PagingResult
-import com.troy.damda.YN
 import com.troy.damda.recordbox.application.port.`in`.event.EventQuery
 import com.troy.damda.recordbox.application.port.`in`.event.EventQuery.EventResult
 import com.troy.damda.recordbox.application.port.`in`.event.EventQuery.GetEventsRequest
@@ -16,7 +15,7 @@ class EventQueryService(
 
     override fun getEventsFrom(userMgmtNo: Long, request: GetEventsRequest): PagingResult<EventResult> {
         val jpaPagingRequest = PageRequest.of(request.pageNo, request.pageSize)
-        return loadEventPort.findAllByCreatedBy(
+        val result = loadEventPort.findAllByCreatedBy(
             userMgmtNo,
             request.iqryStartDate,
             request.iqryEndDate,
@@ -24,8 +23,14 @@ class EventQueryService(
             request.eventRelationshipTypes,
             jpaPagingRequest
         )
-            .map { EventResult.fromEvent(it) }
-            .let { PagingResult(it.number, it.size, it.totalElements, YN.of(it.hasNext()), it.content) }
+        return PagingResult(
+            pageNo = result.pageNo,
+            pageSize = result.pageSize,
+            ttcn = result.ttcn,
+            nextPageExisYN = result.nextPageExisYN,
+            contents = result.contents
+                .map { EventResult.fromEvent(it) }
+        )
 
     }
 }
